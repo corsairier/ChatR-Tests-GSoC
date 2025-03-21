@@ -1,0 +1,64 @@
+The `.Call` function is a convenient way to call external functions from R, but it has some limitations. For example, you can't pass objects of certain types, like vectors or lists, directly between R and C.
+
+To register native routines written in C/C++ in an R package using the .Call interface, you need to follow these steps:
+
+1.  **Use pointers**: You must use pointers to pass data from R to C, which means your C function needs to accept a pointer to a character vector, matrix, or other supported types.
+2.  **Specify the type of argument**: When calling `.Call`, you can use the `type` argument to specify the type of the first argument, allowing you to avoid specifying it in your C code.
+3.  **Use R-specific data structures**: You need to create R-specific data structures like character vectors or matrices within R and pass their addresses to your C function.
+
+Here is a simple example to demonstrate how to register native routines using the .Call interface:
+
+```r
+# File: my_package.R
+
+my PACKAGE <- Rcpp::Package(
+  "MyPackage",
+  version = "1.0",
+  header = {
+    'src/my_cpp_function.cpp'
+  }
+)
+
+MyPackage::my_cpp_function <- function(x) {
+  # Rcpp::export is used to export C++ functions from R
+  Rcpp::export(function(x) {
+    std::vector<int> result;
+    for(int i : x) {
+      if (i > 5) {
+        result.push_back(i);
+      }
+    }
+    return(result);
+  });
+}
+
+MyPackage:::my_cpp_function <- function(x) .Call("Rcpp::cppFunction", "int[] my_cpp_function(std::vector<int> x)", type = "function")
+```
+
+```c
+// src/my_cpp_function.cpp
+
+#include <iostream>
+#include <vector>
+
+SEXP my_cpp_function(SXP x) {
+  std::vector<int>* resultVector = (std::vector<int>*) SXP_cast("PROTOST", x);
+  
+  for(int i : *resultVector) {
+    if (i > 5) {
+      (*resultVector).push_back(i);
+    }
+  }
+
+  Rcpp::NumericVector rResult(resultVector->size());
+  for(size_t i = 0; i < resultVector->size(); ++i)
+    rResult[i] = (*resultVector)[i];
+  
+  return(Rcpp::NumericVector(rResult.data()));
+}
+```
+
+In this example, `my_cpp_function` is a C++ function that takes an integer vector as input. The R equivalent of `.Call("Rcpp::cppFunction", ...)`, which is used to register the native routine in R, calls C++'s `my_cpp_function`. When calling `.Call`, you must specify its arguments and data types explicitly.
+
+Please ensure that your .Call interface matches the signature of your C function.
+
