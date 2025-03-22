@@ -29,3 +29,7 @@ The Result is stored in the file **output.txt** and can be accessed using
 ```bash
 cat output.txt
 ```
+
+## Medium Test
+
+Successfully wrote the `chat_function` which was the best programmatic way to create the chat object inside a function. 
