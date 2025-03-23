@@ -8,8 +8,8 @@ chat_function <- function(text, tout = 60) {
     chat$chat(text)
 }
 
-question <- "How to register native routines written in C/C++ in an R package using the .Call interface?"
+question <- "What is the github of sundialr R package?"
 tout = 300
 
 
-chat_function(question)
+chat_function(question, tout)

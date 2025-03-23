@@ -1,0 +1,16 @@
+Package: funclistR
+Type: Package
+Title: List functions using Ollama
+Version: 0.1.0
+Authors@R: c(
+    person(
+      "Dev", "Goel",
+      email = "dgoel2099@gmail.com",
+      role = c("aut", "cre")
+    )
+  )
+Description: List all the exported functions by a package using Ollama3.2:3b-instruct
+License: None
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.2
