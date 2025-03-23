@@ -33,3 +33,10 @@ cat output.txt
 ## Medium Test
 
 Successfully wrote the `chat_function` which was the best programmatic way to create the chat object inside a function. 
+
+
+## Hard Test
+- Developed an R package to list all the functions exported by a package.
+- It does not print all the packages correctly or completely, but it can be corrected using proper tooling/function calling.
+- It can be done by creating a function, which can scrape the web for finding the `NAMESPACE` file from their respective github repositories.
+- Also, currently it works very slow on my PC since it does not have a GPU and also `llama3.2:3b-instruct-q4_K_M` is a very heavy model.
